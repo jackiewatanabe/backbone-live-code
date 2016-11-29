@@ -2,27 +2,24 @@ import $ from 'jquery';
 import _ from 'underscore';
 import Backbone from 'backbone';
 
+import Task from 'app/models/task';
 import TaskView from 'app/views/task_view';
 
 var TaskListView = Backbone.View.extend({
   initialize: function(options) {
-    this.taskData = options.taskData;
-
     // Compile a template to be shared between the individual tasks
     this.taskTemplate = _.template($('#task-template').html());
 
     // Keep track of the <ul> element
     this.listElement = this.$('.task-list');
 
-    // Create a TaskView for each task
+    // We'll keep track of a list of task models and a list
+    // of task views.
+    this.modelList = [];
     this.cardList = [];
-    this.taskData.forEach(function(task) {
-      var cardOptions = {
-        task: task,
-        template: this.taskTemplate
-      };
-      var card = new TaskView(cardOptions);
-      this.cardList.push(card);
+
+    options.taskData.forEach(function(rawTask) {
+      this.addTask(rawTask);
     }, this); // bind `this` so it's available inside forEach
 
     // Keep track of our form input fields
@@ -58,23 +55,34 @@ var TaskListView = Backbone.View.extend({
     event.preventDefault();
 
     // Get the input data from the form and turn it into a task
-    var task = this.getInput();
+    var rawTask = this.getInput();
 
-    // Add the new task to our list of tasks
-    this.taskData.push(task);
-
-    // Create a card for the new task, and add it to our card list
-    var card = new TaskView({
-      task: task,
-      template: this.taskTemplate
-    });
-    this.cardList.push(card);
+    this.addTask(rawTask);
 
     // Re-render the whole list, now including the new card
     this.render();
 
     // Clear the input form so the user can add another task
     this.clearInput();
+  },
+
+  // Turn a raw task into a Task model, add it to our list of tasks,
+  // create a card for it, and add that card to our list of cards.
+  addTask: function(rawTask) {
+    // Create a Task from this raw data
+    var task = new Task(rawTask);
+
+    // Add the new task model to our list
+    this.modelList.push(task);
+
+    // Create a card for the new task
+    var card = new TaskView({
+      model: task,
+      template: this.taskTemplate
+    });
+
+    // Add the card to our card list
+    this.cardList.push(card);
   },
 
   getInput: function() {
