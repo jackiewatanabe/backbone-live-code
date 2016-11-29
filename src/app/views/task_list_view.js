@@ -40,7 +40,7 @@ var TaskListView = Backbone.View.extend({
       card.render();
 
       // Add that HTML to our task list
-      this.listElement.append(card.$el.html());
+      this.listElement.append(card.$el);
     }, this);
 
     return this; // enable chained calls
