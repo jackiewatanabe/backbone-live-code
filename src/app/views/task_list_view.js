@@ -17,10 +17,11 @@ var TaskListView = Backbone.View.extend({
     // Create a TaskView for each task
     this.cardList = [];
     this.taskData.forEach(function(task) {
-      var card = new TaskView({
+      var cardOptions = {
         task: task,
         template: this.taskTemplate
-      });
+      };
+      var card = new TaskView(cardOptions);
       this.cardList.push(card);
     }, this); // bind `this` so it's available inside forEach
 
@@ -42,7 +43,7 @@ var TaskListView = Backbone.View.extend({
       card.render();
 
       // Add that HTML to our task list
-      this.listElement.append(card.$el);
+      this.listElement.append(card.$el.html());
     }, this);
 
     return this; // enable chained calls
