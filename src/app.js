@@ -1,5 +1,6 @@
 import $ from 'jquery';
 
+import TaskList from 'app/collections/task_list';
 import TaskListView from 'app/views/task_list_view';
 
 var taskData = [
@@ -16,9 +17,10 @@ var taskData = [
 ];
 
 $(document).ready(function() {
+  var taskList = new TaskList(taskData);
   var options = {
     el: $('#application'),
-    taskData: taskData
+    model: taskList
   };
   var application = new TaskListView(options);
   application.render();

@@ -20,12 +20,21 @@ var TaskView = Backbone.View.extend({
   },
 
   events: {
-    "click .complete-button": "completeHandler"
+    "click .complete-button": "completeHandler",
+    "click .delete-button": "deleteHandler"
   },
 
   completeHandler: function(event) {
     console.log("completeHandler called!");
     this.model.toggleComplete();
+  },
+
+  deleteHandler: function(event) {
+    console.log("deleteHandler called!");
+    if (window.confirm("Are you sure you want to delete this task?")) {
+      console.log("going to delete it!");
+      this.model.destroy();
+    }
   }
 });
 

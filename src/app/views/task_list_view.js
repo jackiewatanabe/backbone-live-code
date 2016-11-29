@@ -2,7 +2,6 @@ import $ from 'jquery';
 import _ from 'underscore';
 import Backbone from 'backbone';
 
-import Task from 'app/models/task';
 import TaskView from 'app/views/task_view';
 
 var TaskListView = Backbone.View.extend({
@@ -15,10 +14,9 @@ var TaskListView = Backbone.View.extend({
 
     // We'll keep track of a list of task models and a list
     // of task views.
-    this.modelList = [];
     this.cardList = [];
 
-    options.taskData.forEach(function(rawTask) {
+    this.model.forEach(function(rawTask) {
       this.addTask(rawTask);
     }, this); // bind `this` so it's available inside forEach
 
@@ -27,6 +25,17 @@ var TaskListView = Backbone.View.extend({
       title: this.$('.new-task input[name="title"]'),
       description: this.$('.new-task input[name="description"]')
     };
+
+    // When a model is added to the collection, create
+    // a card for that model and add it to our list of cards
+    this.listenTo(this.model, 'add', this.addTask);
+
+    // When a model is removed from the collection, remove
+    // the card for that task from our list of cards
+    this.listenTo(this.model, 'remove', this.removeTask);
+
+    // When the model updates, re-render the list of cards
+    this.listenTo(this.model, 'update', this.render);
   },
 
   render: function() {
@@ -57,10 +66,8 @@ var TaskListView = Backbone.View.extend({
     // Get the input data from the form and turn it into a task
     var rawTask = this.getInput();
 
-    this.addTask(rawTask);
-
-    // Re-render the whole list, now including the new card
-    this.render();
+    // Add the task to our collection
+    this.model.add(rawTask);
 
     // Clear the input form so the user can add another task
     this.clearInput();
@@ -68,13 +75,7 @@ var TaskListView = Backbone.View.extend({
 
   // Turn a raw task into a Task model, add it to our list of tasks,
   // create a card for it, and add that card to our list of cards.
-  addTask: function(rawTask) {
-    // Create a Task from this raw data
-    var task = new Task(rawTask);
-
-    // Add the new task model to our list
-    this.modelList.push(task);
-
+  addTask: function(task) {
     // Create a card for the new task
     var card = new TaskView({
       model: task,
@@ -83,6 +84,16 @@ var TaskListView = Backbone.View.extend({
 
     // Add the card to our card list
     this.cardList.push(card);
+  },
+
+  removeTask: function(task) {
+    var filteredList = [];
+    this.cardList.forEach(function(card) {
+      if (card.model != task) {
+        filteredList.push(card);
+      }
+    });
+    this.cardList = filteredList;
   },
 
   getInput: function() {
