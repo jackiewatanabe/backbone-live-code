@@ -37,13 +37,26 @@
   </main>
 
   <script type="text/template" id="task-template">
-    <li class="task">
-      <h2>
+    <li class="task row">
+      <div class="small-12 large-10 columns">
+      <% if (task.complete) { %>
+        <h2 class="strikeme">
+      <% } else { %>
+        <h2>
+      <% } %>
         <%- task.title %>
       </h2>
       <p>
         <%- task.description %>
       </p>
+    </div>
+      <button class="button small-12 large-2 columns complete-button">
+      Mark <%= task.complete ? "Incomplete" : "Complete" %>
+    </button>
+    <button class="alert button small-12 large-2 columns delete-button">
+      DELETE
+    </button>
+
     </li>
   </script>
 
