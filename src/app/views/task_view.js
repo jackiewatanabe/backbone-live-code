@@ -21,7 +21,8 @@ var TaskView = Backbone.View.extend({
 
   events: {
     "click .complete-button": "completeHandler",
-    "click .delete-button": "deleteHandler"
+    "click .delete-button": "deleteHandler",
+    "dblclick": "editHandler"
   },
 
   completeHandler: function(event) {
@@ -35,6 +36,11 @@ var TaskView = Backbone.View.extend({
       console.log("going to delete it!");
       this.model.destroy();
     }
+  },
+
+  editHandler: function(event) {
+    console.log("editHandler called");
+    this.trigger('edit', this.model);
   }
 });
 

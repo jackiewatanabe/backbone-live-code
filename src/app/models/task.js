@@ -7,8 +7,8 @@ var Task = Backbone.Model.extend({
     description: "placeholder description",
     complete: false
   },
-  initialize: function() {
-    console.log("Created new task with title " + this.title);
+  initialize: function(options) {
+    console.log("Created new task with options " + this.options);
   },
   toggleComplete: function() {
     var newStatus = !(this.get('complete'));

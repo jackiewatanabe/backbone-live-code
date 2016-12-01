@@ -82,8 +82,18 @@ var TaskListView = Backbone.View.extend({
       template: this.taskTemplate
     });
 
+    this.listenTo(card, 'edit', this.editTask);
+
     // Add the card to our card list
     this.cardList.push(card);
+  },
+
+  editTask: function(task) {
+    console.log('in editTask for task ' + task.get('title'));
+
+    this.setInput(task);
+
+    task.destroy();
   },
 
   removeTask: function(task) {
@@ -102,6 +112,11 @@ var TaskListView = Backbone.View.extend({
       description: this.input.description.val()
     };
     return task;
+  },
+
+  setInput: function(task) {
+    this.input.title.val(task.get('title'));
+    this.input.description.val(task.get('description'));
   },
 
   clearInput: function(event) {
