@@ -84,20 +84,31 @@ $(document).ready(function() {
   // render(otherTask);
   // render(anotherTask);
 
-  $("#add-task").click(function() {
-    var formData = getFormData();
-    var newTask = new Task(formData);
-    // console.log(formData.completed);
-    render(newTask);
-    console.log(newTask.get("completed"));
-  });
+  // $("#add-task").click(function() {
+  //   var formData = getFormData();
+  //   var newTask = new Task(formData);
+  //   // console.log(formData.completed);
+  //   render(newTask);
+  //   console.log(newTask.get("completed"));
+  // });
 
   // myTaskList.each(function(task) {
   //   render(task);
   // });
 
+  // listens for changes to the tasklist, and when there's a change, it will re-render the list
   renderList(myTaskList);
-  renderList(myTaskList);
+  myTaskList.on("update", function() {
+    renderList(myTaskList);
+  });
+
+  $("#add-task").click(function() {
+    var task = new Task(getFormData());
+
+    myTaskList.add(task);
+
+    // renderList(myTaskList);
+  });
 
 });
 
