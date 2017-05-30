@@ -1,17 +1,21 @@
 import $ from 'jquery';
 import _ from 'underscore';
 import Task from './models/task.js';
+import TaskList from './collections/task_list.js';
 
 var taskData = [
   {
     title: 'Mow the lawn',
-    description: 'Must be finished before BBQ on Sat afternoon'
+    description: 'Must be finished before BBQ on Sat afternoon',
+    completed: true
   }, {
     title: 'Go to the Bank',
-    description: 'Need to make a transfer'
+    description: 'Need to make a transfer',
+    completed: false
   }, {
     title: 'Tune the Piano',
-    description: 'High C is missing or something???'
+    description: 'High C is missing or something???',
+    completed: true
   }
 ];
 
@@ -32,6 +36,8 @@ var anotherTask = new Task({
   description: "weee",
   completed: true
 });
+
+var myTaskList = new TaskList(taskData);
 
 var getFormData = function() {
   var formTitle = $("#title").val();
@@ -66,10 +72,17 @@ var render = function(task) {
   $('.todo-items').append(compiledHTML);
 };
 
+var renderList = function(taskList) {
+  $(".todo-items").empty();
+  taskList.each(function(task){
+    render(task);
+  });
+};
+
 $(document).ready(function() {
-  render(myTask);
-  render(otherTask);
-  render(anotherTask);
+  // render(myTask);
+  // render(otherTask);
+  // render(anotherTask);
 
   $("#add-task").click(function() {
     var formData = getFormData();
@@ -78,6 +91,14 @@ $(document).ready(function() {
     render(newTask);
     console.log(newTask.get("completed"));
   });
+
+  // myTaskList.each(function(task) {
+  //   render(task);
+  // });
+
+  renderList(myTaskList);
+  renderList(myTaskList);
+
 });
 
 
