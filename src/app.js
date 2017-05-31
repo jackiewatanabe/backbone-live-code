@@ -13,9 +13,9 @@ var taskData = [
     description: 'Need to make a transfer',
     completed: false
   }, {
-    title: 'Tune the Piano',
-    description: 'High C is missing or something???',
-    completed: true
+    // title: 'Tune the Piano',
+    description: 'High C is missing or something???'
+    // completed: true
   }
 ];
 
@@ -66,10 +66,14 @@ var render = function(task) {
   var templateObject = _.template(templateText);
 
   // Fill in the ERB wth data from our task
-  var compiledHTML = templateObject(task.toJSON());
+  var compiledHTML = $(templateObject(task.toJSON()));
 
 // append the result to the DOM
   $('.todo-items').append(compiledHTML);
+
+  compiledHTML.find('button.alert').click({taskToRemove: task}, function(params) {
+    myTaskList.remove(params.data.taskToRemove);
+  });
 };
 
 var renderList = function(taskList) {
@@ -106,6 +110,7 @@ $(document).ready(function() {
     var task = new Task(getFormData());
 
     myTaskList.add(task);
+    console.log(myTaskList);
 
     // renderList(myTaskList);
   });
