@@ -13,9 +13,9 @@ var taskData = [
     description: 'Need to make a transfer',
     completed: false
   }, {
-    // title: 'Tune the Piano',
-    description: 'High C is missing or something???'
-    // completed: true
+    title: 'Tune the Piano',
+    description: 'High C is missing or something???',
+    completed: true
   }
 ];
 
@@ -79,7 +79,12 @@ var render = function(task) {
 var renderList = function(taskList) {
   $(".todo-items").empty();
   taskList.each(function(task){
+    task.logStatus();
     render(task);
+    task.toggleComplete();
+    // $(".button success").click(function() {
+    //   task.toggleComplete();
+    // });
   });
 };
 
@@ -114,6 +119,7 @@ $(document).ready(function() {
 
     // renderList(myTaskList);
   });
+
 
 });
 
