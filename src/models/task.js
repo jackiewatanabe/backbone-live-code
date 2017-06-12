@@ -1,5 +1,7 @@
 import Backbone from 'backbone';
 
+console.log("****Yo breadcrumb #001***");
+
 var Task = Backbone.Model.extend({
   defaults: {
     title: 'DEFAULT',
@@ -14,9 +16,11 @@ var Task = Backbone.Model.extend({
   initialize: function(params) {
     console.log("Starting", params);
     this.logStatus();
+
+    console.log("****Yo breadcrumb #1 in task.js***");
   },
 
-  toggleComplete: function() {
+  toggleComplete1: function() {
     if (this.get("completed")) {
       this.set("completed", false);
     } else {
@@ -29,5 +33,7 @@ var Task = Backbone.Model.extend({
   }
 
 });
+
+console.log("****Yo breadcrumb #002***");
 
 export default Task;
